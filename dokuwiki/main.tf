@@ -67,6 +67,21 @@ resource "google_compute_instance" "vm_instance" {
     email  = google_service_account.proj1-service-account.email
     scopes = ["cloud-platform"]
     }
+
+  lifecycle {
+    ignore_changes = [attached_disk]
+  }
+}
+
+resource "google_compute_attached_disk" "default" {
+  disk     = google_compute_disk.default.id
+  instance = google_compute_instance.vm_instance.id
+  device_name  = "data"
+}
+
+resource "google_compute_disk" "default" {
+  name  = "attached-disk-instance"
+  size  = "100"
 }
 
 resource "google_compute_firewall" "default-firewall" {

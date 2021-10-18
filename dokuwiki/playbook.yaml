@@ -1,0 +1,23 @@
+---
+- hosts: all
+  name: Add cis-92 packages
+  become: yes
+  tasks:
+    - name: Install packages 
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        name:
+          - apache2 
+          - php
+          - php-xml
+    - name: Create a ext4 filesystem on /dev/disk/by-id/google-data
+      filesystem:
+        fstype: ext4
+        dev:  /dev/disk/by-id/google-data
+    - name: Mount /dev/disk/by-id/google-data on /var/www
+      mount :
+        path: /var/www
+        src: /dev/disk/by-id/google-data
+        fstype: ext4
+        state: mounted
