@@ -47,7 +47,7 @@ resource "google_project_iam_member" "project_member" {
 }
 
 resource "google_storage_bucket" "auto-expire" {
-  name          = "auto-backups"
+  name          = "cis91-dokuwiki-backups"
   location      = "US"
   force_destroy = true
 
