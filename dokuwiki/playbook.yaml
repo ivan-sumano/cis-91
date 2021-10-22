@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  name: Add cis-92 packages
+  name: Setup Docuwiki
   become: yes
   tasks:
     - name: Install packages 
@@ -11,13 +11,28 @@
           - apache2 
           - php
           - php-xml
+
     - name: Create a ext4 filesystem on /dev/disk/by-id/google-data
-      filesystem:
+      community.general.filesystem:
         fstype: ext4
         dev:  /dev/disk/by-id/google-data
+
     - name: Mount /dev/disk/by-id/google-data on /var/www
-      mount :
+      ansible.posix.mount:
         path: /var/www
         src: /dev/disk/by-id/google-data
         fstype: ext4
         state: mounted
+
+    - name: Create /html directory
+      ansible.builtin.file:
+        state: directory
+        owner: www-data
+        path: /var/www/html
+
+    - name: Download and unarchive Dokuwiki package
+      ansible.builtin.unarchive:
+        src: https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
+        dest: /var/www/html
+        remote_src: yes
+        extra opts: --strip-components=1
