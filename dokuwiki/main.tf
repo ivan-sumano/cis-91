@@ -42,7 +42,7 @@ resource "google_service_account" "proj1-service-account" {
 }
 
 resource "google_project_iam_member" "project_member" {
-  role = "roles/editor"
+  role = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.proj1-service-account.email}"
 }
 
