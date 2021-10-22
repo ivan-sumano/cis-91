@@ -34,11 +34,12 @@
       ansible.builtin.unarchive:
         src: https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
         dest: /var/www/html
+        owner: www-data
         remote_src: yes
-        extra opts: --strip-components=1
+        extra_opts: --strip-components=1
 
     - name: Add backup shell script
       ansible.builtin.copy:
         src: backup.sh
         dest: /etc/cron.hourly/backup
-        moude: u+x
+        mode: u+x
