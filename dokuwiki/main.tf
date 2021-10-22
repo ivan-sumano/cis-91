@@ -46,6 +46,21 @@ resource "google_project_iam_member" "project_member" {
   member = "serviceAccount:${google_service_account.proj1-service-account.email}"
 }
 
+resource "google_storage_bucket" "auto-expire" {
+  name          = "auto-backups"
+  location      = "US"
+  force_destroy = true
+
+  lifecycle_rule {
+    condition {
+      age = 180
+    }
+    action {
+      type = "Delete"
+    }
+  }
+}
+
 resource "google_compute_instance" "vm_instance" {
   name         = "cis91"
   machine_type = "e2-micro"
